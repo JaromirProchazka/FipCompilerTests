@@ -4,8 +4,6 @@
 
 #include "TagedTree.hpp"
 
-Node* fip_splay(top) {
 
-}
 
 #endif

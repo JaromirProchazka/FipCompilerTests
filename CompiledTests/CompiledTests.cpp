@@ -39,8 +39,8 @@ int main()
     log_tagged(list);
     printf("\n");
 
-    Node* new_tree = init_tree(init_integer(4),
-        init_tree(init_integer(2), 
+    Node* new_tree = init_node(init_integer(4),
+        init_node(init_integer(2), 
             init_leaf(init_integer(1)),
             init_leaf(init_integer(3))
         ),

@@ -130,7 +130,9 @@
   <ItemGroup>
     <ClCompile Include="CompiledTests.cpp" />
     <ClCompile Include="FipListAlgo.cpp" />
+    <ClCompile Include="FipTreeAlgo.cpp" />
     <ClCompile Include="TagedList.cpp" />
+    <ClCompile Include="TaggedTree.cpp" />
     <ClCompile Include="TagType.cpp" />
   </ItemGroup>
   <ItemGroup>

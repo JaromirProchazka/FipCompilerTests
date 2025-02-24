@@ -27,6 +27,12 @@
     <ClCompile Include="TagedList.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="TaggedTree.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FipTreeAlgo.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TagType.hpp">
