@@ -2,14 +2,24 @@
 #ifndef TAGED_LIST_H 
 #define TAGED_LIST_H
 
+
 #include <iostream>
 #include "TagType.hpp"
 
-
+template<typename HeadT, typename... TailT>
 struct List {
     struct Tagged base;
-    size_t size;
-    Tagged* value;
+    //size_t size;
+    HeadT* value;
+    List<TailT...>* tail;
+};
+
+template<typename HeadT>
+struct List
+{
+    struct Tagged base;
+    //size_t size;
+    HeadT* value;
     List* tail;
 };
 
@@ -19,11 +29,14 @@ template<typename T>
 concept IsTaggedPtrPtr = std::same_as<T, Tagged**>;
 
 void PREPARE_LISTS();
-List* init_list();
-List* _init_list_node(size_t size, Tagged* value, Tagged* recycle_address = NULL);
-List* list_append(Tagged* value, List* tail, Tagged* recycle_address = NULL);
+Tagged* init_list();
+template<typename Arg>
+List<Arg>* _init_list_node(size_t size, Arg* value, Tagged* recycle_address = NULL);
+template<typename Arg, typename... Args>
+List<Arg, Args...>* list_append(Arg* value, List<Args...>* tail, Tagged* recycle_address = NULL);
 
-void _cons(List* current, Tagged* last);
+template<typename Arg, typename... Args>
+void _cons(List<Args...>* current, Arg* last);
 template <IsTaggedPtr Arg, IsTaggedPtr... Args>
 void _cons(List* current, Arg next, Args... args) {
     List* result = _init_list_node(sizeof...(Args) + 1, next);

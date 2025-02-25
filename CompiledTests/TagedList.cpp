@@ -1,15 +1,15 @@
 #include "TagedList.hpp"
 
 
-List* EMPTY_LIST;
+Tagged* EMPTY_LIST;
 
 void PREPARE_LISTS() {
-    List* new_node = (List*)malloc(sizeof(List));
+    Tagged* new_node = (Tagged*)malloc(sizeof(Tagged));
     assert(new_node != NULL);
-    init_tag(&new_node->base, NIL);
-    new_node->size = 0;
-    new_node->value = NULL;
-    new_node->tail = NULL;
+    init_tag(new_node, NIL);
+    //new_node->size = 0;
+    //new_node->value = NULL;
+    //new_node->tail = NULL;
 
     EMPTY_LIST = new_node;
 }
@@ -66,7 +66,7 @@ List* tail(const List* list) {
     return list->tail;
 }
 
-List* init_list() {
+Tagged* init_list() {
     return EMPTY_LIST;
 }
 
