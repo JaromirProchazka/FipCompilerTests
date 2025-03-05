@@ -20,7 +20,7 @@ List* _init_list_node(size_t size, Tagged* value, Tagged* recycle_address) {
         return NULL;
     }
 
-    init_tag(&new_node->base, LIST_VALUE);
+    init_tag(&new_node->base, LIST);
     new_node->value = value;
     new_node->size = size;
     return new_node;
@@ -59,6 +59,8 @@ void _unsave_split_step(const List* splitted, Tagged** last) {
     }
 }
 
+
+
 Tagged* head(const List* list) {
     return list->value;
 }
@@ -74,4 +76,20 @@ bool is_empty(const List* list) {
     if (list == NULL || list->size == 0)
         return true;
     return false;
+}
+
+void printList(const RecursiveList& list, int indent) {
+    std::cout << list.type << "{\n";
+    for (const auto& element : list.elements) {
+        for (int i = 0; i < indent + 1; ++i) std::cout << "  ";
+
+        if (std::holds_alternative<RecursiveList>(element)) {
+            printList(std::get<RecursiveList>(element), indent + 1);
+        }
+        else {
+            std::cout << "&value\n";
+        }
+    }
+    for (int i = 0; i < indent; ++i) std::cout << "  ";
+    std::cout << "}\n";
 }

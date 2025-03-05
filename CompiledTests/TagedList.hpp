@@ -4,6 +4,10 @@
 
 #include <iostream>
 #include "TagType.hpp"
+#include <variant>
+#include <algorithm>
+#include <ranges>
+#include <vector>
 
 
 struct List {
@@ -11,6 +15,47 @@ struct List {
     size_t size;
     Tagged* value;
     List* tail;
+
+    // Iterator implementation
+    struct Iterator {
+        List* current;
+
+        Iterator() : current(nullptr) {}
+        Iterator(List* node) : current(node) {}
+
+        Iterator& operator++() {
+            if (current) {
+                current = current->tail;
+            }
+            return *this;
+        }
+
+        Iterator operator++(int) {
+            Iterator temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        List* operator*() {
+            return current;
+        }
+
+        Tagged* operator->() {
+            return &current->base;
+        }
+
+        bool operator==(const Iterator& other) {
+            return current == other.current;
+        }
+
+        bool operator!=(const Iterator& other) {
+            return !(*this == other);
+        }
+    };
+
+    // Container methods
+    Iterator begin() { return Iterator(this); }
+    Iterator end() { return init_list(); }
 };
 
 template<typename T>
@@ -54,8 +99,37 @@ List* tail(const List* list);
 
 bool is_empty(const List* list);
 
-template <IsTaggedPtrPtr... Args>
-bool SPLIT(const List* splitted, Args... results);
+//////////////////////////////////////////////////////////////
+
+using ListElement = std::variant<Tagged**, RecursiveList>;
+using RecursiveListContainer = std::vector<ListElement>;
+class RecursiveList {
+    ValueType type;
+    RecursiveListContainer elements;
+
+public:
+    ValueType type() {
+        return type;
+    }
+    RecursiveList(ValueType t, RecursiveListContainer init) : elements(init), type(t) {}
+    RecursiveList(ValueType t, std::initializer_list<ListElement> init) : elements(init), type(t) {}
+    size_t size() {
+        return elements.size();
+    }
+    RecursiveListContainer::iterator begin() {
+        return elements.begin();
+    }
+    RecursiveListContainer::iterator end() {
+        return elements.end();
+    }
+};
+void printList(const RecursiveList& list, int indent = 0);
+RecursiveList nested(ValueType t, std::initializer_list<ListElement> init) {
+    return RecursiveList(t, init);
+}
+
+//bool SPLIT(const List* splitted, RecursiveList binders);
+//bool SPLIT(const List* splitted, Tagged** binders);
 
 void _unsave_split_step(const List* splitted, Tagged** last);
 
@@ -65,12 +139,29 @@ void _unsave_split_step(const List* splitted, Arg first, Args... results)
     *first = splitted->value;
     return _unsave_split_step(tail(splitted), results...);
 }
-template <IsTaggedPtrPtr... Args>
-bool SPLIT(const List* splitted, Args... results)
+
+
+bool SPLIT(List& splitted, RecursiveList& binders)
 {
-    if (splitted->size < sizeof...(results))
+    if (splitted.size < binders.size())
         return false;
-    _unsave_split_step(splitted, results...);
+
+    auto&& split = splitted.begin();
+    auto&& bind = binders.begin();
+    while (split != splitted.end() && bind != binders.end()) {
+        if (std::holds_alternative<RecursiveList>(*bind)) {
+            if (!SPLIT(**split, std::get<RecursiveList>(*bind))) {
+                return false;
+            }
+        }
+        else {
+            // FIXME: handle
+        }
+
+        ++split;
+        ++bind;
+    }
+
     return true;
 }
 

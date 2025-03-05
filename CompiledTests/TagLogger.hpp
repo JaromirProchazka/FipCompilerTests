@@ -38,15 +38,25 @@ void print_tabs(int count) {
     }
 }
 
-void print_tree_level(Node* tree, int level) {
-    print_tabs(level);
-    log_tagged(tree->value);
-    printf("\n");
-    if (tree->left) print_tree_level((Node*)tree->left, level + 1);
-    if (tree->right) print_tree_level((Node*)tree->right, level + 1);
+void print_tree_level(Tagged* tree, int level) {
+    ValueType type = get_type(tree);
+    if (type == TREE_NODE) {
+        Node* node = (Node*)tree;
+        print_tabs(level);
+        log_tagged(node->value);
+        printf("\n");
+        if (node->left) print_tree_level(node->left, level + 1);
+        if (node->right) print_tree_level(node->right, level + 1);
+    }
+    if (type == TREE_LEAF) {
+        Leaf* leaf = (Leaf*)tree;
+        print_tabs(level);
+        log_tagged(leaf->value);
+        printf("\n");
+    }
 }
 
-void print_tree(Node* tree) {
+void print_tree(Tagged* tree) {
     print_tree_level(tree, 0);
 }
 
@@ -62,14 +72,17 @@ void log_tagged(Tagged* val) {
     case NIL:
         printf("NIL");
         return;
-    case LIST_VALUE:
+    case LIST:
         print_list((List*)val);
         break;
-    case INT_VALUE:
+    case INT:
         print_int((Integer*)val);
         break;
-    case TREE_NODE_VALUE:
-        print_tree((Node*)val);
+    case TREE_NODE:
+        print_tree(val);
+        break;
+    case TREE_LEAF:
+        print_tree(val);
         break;
     default:
         assert(false);

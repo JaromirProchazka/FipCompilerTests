@@ -39,12 +39,12 @@ int main()
     log_tagged(list);
     printf("\n");
 
-    Node* new_tree = init_node(init_integer(4),
-        init_node(init_integer(2), 
-            init_leaf(init_integer(1)),
-            init_leaf(init_integer(3))
+    Node* new_tree = init_node((Tagged*)init_integer(4),
+        (Tagged*)init_node((Tagged*)init_integer(2),
+            (Tagged*)init_leaf((Tagged*)init_integer(1)),
+            (Tagged*)init_leaf((Tagged*)init_integer(3))
         ),
-        init_leaf(init_integer(5))
+        (Tagged*)init_leaf((Tagged*)init_integer(5))
     );
     printf("Tree: ");
     log_tagged(new_tree);
