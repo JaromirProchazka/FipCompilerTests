@@ -20,7 +20,7 @@ List* _init_list_node(size_t size, Tagged* value, Tagged* recycle_address) {
         return NULL;
     }
 
-    init_tag(&new_node->base, LIST_VALUE);
+    init_tag(&new_node->base, LIST);
     new_node->value = value;
     new_node->size = size;
     return new_node;

@@ -1,12 +1,12 @@
 #include "TagedTree.hpp"
 
-Node* init_node(Tagged* value, Tagged* l, Tagged* r, Tagged* recycle_address = NULL) {
+Node* init_node(Tagged* value, Tagged* l, Tagged* r, Tagged* recycle_address) {
     Node* new_node = recycle_address ? (Node*)recycle_address : (Node*)malloc(sizeof(Node));
     if (new_node == NULL) {
         return NULL;
     }
 
-    init_tag(&new_node->base, TREE_NODE_VALUE);
+    init_tag(&new_node->base, TREE_NODE);
     new_node->value = value;
     new_node->left = l;
     new_node->right = r;
@@ -29,7 +29,7 @@ Root* init_root(Tagged* recycle_address) {
         return NULL;
     }
 
-    init_tag(&new_node->base, SZIPPER_ROOT_VALUE);
+    init_tag(&new_node->base, SZIPPER_ROOT);
     return new_node;
 }
 
@@ -39,7 +39,7 @@ NodeL* init_nodel(Tagged* up, Tagged* value, Tagged* right, Tagged* recycle_addr
         return NULL;
     }
 
-    init_tag(&new_node->base, SZIPPER_NODEL_VALUE);
+    init_tag(&new_node->base, SZIPPER_NODEL);
     new_node->up = up;
     new_node->value = value;
     new_node->right = right;
@@ -52,7 +52,7 @@ NodeR* init_noder(Tagged* left, Tagged* value, Tagged* up, Tagged* recycle_addre
         return NULL;
     }
 
-    init_tag(&new_node->base, SZIPPER_NODER_VALUE);
+    init_tag(&new_node->base, SZIPPER_NODER);
     new_node->up = up;
     new_node->value = value;
     new_node->left = left;
@@ -65,7 +65,7 @@ Top* init_top(Tagged* left, Tagged* value, Tagged* right, Tagged* recycle_addres
         return NULL;
     }
 
-    init_tag(&new_node->base, SZIPPER_NODEL_VALUE);
+    init_tag(&new_node->base, SZIPPER_NODEL);
     new_node->left = left;
     new_node->value = value;
     new_node->right = right;

@@ -16,7 +16,7 @@ Integer* init_integer(int val, Tagged* recycle_address = NULL) {
         return NULL;
     }
 
-    init_tag(&new_int->base, INT_VALUE);
+    init_tag(&new_int->base, INT);
     new_int->value = val;
     return new_int;
 }
